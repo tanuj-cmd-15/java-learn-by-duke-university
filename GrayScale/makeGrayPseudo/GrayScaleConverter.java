@@ -1,7 +1,7 @@
 /**
  * Create a gray scale version of an image by setting all color components of each pixel to the same value.
  * 
- * @author Duke Software Team 
+ * @author Tushar
  */
 import edu.duke.*;
 import java.io.*;
