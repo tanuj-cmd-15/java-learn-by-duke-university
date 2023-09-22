@@ -1,9 +1,8 @@
-
 /**
  * Illustrate Character methods
  * 
- * @author Duke Software Team 
- * @version (a version number or a date)
+ * @author Tushar
+ * @version 
  */
 public class CharacterDemo {
     public void digitTest() {
