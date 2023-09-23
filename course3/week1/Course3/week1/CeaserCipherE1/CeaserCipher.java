@@ -1,66 +1,94 @@
-/* PROBLEM STATEMENT 
-Assignment 2: Caesar Cipher
-You will start with the Caesar Cipher algorithm you learned about in the videos, and you will make some enhancements to it, so that it works with all letters (both uppercase and lowercase) and to make it a little bit harder to decrypt. Write these methods in a CaesarCipher class you can use in the next lesson.
-Specifically, you should do the following:
-Create a new class called CaesarCipher.
-Write the method encrypt that has two parameters, a String named input and an int named key. This method returns a String that has been encrypted using the Caesar Cipher algorithm explained in the videos. Assume that all the alphabetic characters are uppercase letters. For example, the call
-        encrypt(“FIRST LEGION ATTACK EAST FLANK!”, 23)
-    should return the string 
-        “CFOPQ IBDFLK XQQXZH BXPQ CIXKH!”
-Write the void method testCaesar that has no parameters. This method should read a file and encrypt the complete file using the Caesar Cipher algorithm, printing the encrypted message. You may want to include the lines:
-FileResource fr = new FileResource();
-String message = fr.asString();
-String encrypted = encrypt(message, key);
-System.out.println("key is " + key + "\n" + encrypted);
-Modify the encrypt method to be able to handle both uppercase and lowercase letters. For example, encrypt(“First Legion”, 23) should return “Cfopq Ibdflk”, and encrypt(“First Legion”, 17) should return “Wzijk Cvxzfe”.  Be sure to test the encrypt method. 
-Write the method encryptTwoKeys that has three parameters, a String named input, and two integers named key1 and key2. This method returns a String that has been encrypted using the following algorithm. Parameter key1 is used to encrypt every other character with the Caesar Cipher algorithm, starting with the first character, and key2 is used to encrypt every other character, starting with the second character. For example, the call encryptTwoKeys(“First Legion”, 23, 17) should return “Czojq Ivdzle”. Note the ‘F’ is encrypted with key 23, the first ‘i’ with 17, the ‘r’ with 23, and the ‘s’ with 17, etc. Be sure to test this metho
-*/
-
-
 /**
- * Write a description of CeaserCipher here.
+ * This Class extends Caesar Cipher to include Object Oriented programming practices
  * 
- * @author Tushar 
- * @version (a version number or a date)
- */
-
+ * @author Tushar
+ * @version Sep 23,2023
+*/
 import edu.duke.*;
 import org.apache.commons.csv.*;
 import java.io.*;
 
-public class CeaserCipher {
-    public String encrypt(String input , int key){
+public class CaesarCipher2 {
+    
+    private String alphabet;
+    private String shiftedAlphabet;
+    private int mainKey;
+    
+    public CaesarCipher2(int key){
+        
+        alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        shiftedAlphabet = alphabet.substring(key)+ alphabet.substring(0,key);
+        mainKey = key;
+    }
+    
+    
+public boolean isEven(int n){
+    if ((n % 2) == 0) return true; else return false; 
+}
+    
+public String encrypt(String input) {
+        //Make a StringBuilder with message (encrypted)
         StringBuilder encrypted = new StringBuilder(input);
-        String alphabet = "ABCDEFGHIGKLMNOPQRSTUVWXYZ";
-        String shiftedAlphabet = alphabet.substring(key) + alphabet.substring(0,key);
-        for(int i =0; i< encrypted.length(); i++){
+
+        //Count from 0 to < length of encrypted, (call it i)
+        for(int i = 0; i < encrypted.length(); i++) {
+            //Look at the ith character of encrypted (call it currChar)
             char currChar = encrypted.charAt(i);
+            //Find the index of currChar in the alphabet (call it idx)
             int idx = alphabet.indexOf(Character.toUpperCase(currChar));
+            //If currChar is in the alphabet
             if(idx != -1){
+                //Get the idxth character of shiftedAlphabet (newChar)
                 char newChar = shiftedAlphabet.charAt(idx);
-                if(Character.isLowerCase(currChar)) newChar= Character.toLowerCase(newChar);
-                if(Character.isUpperCase(currChar)) newChar = Character.toUpperCase(newChar);
-                encrypted.setCharAt(i,newChar);          
+                //Replace the ith character of encrypted with newChar
+                if (Character.isLowerCase(currChar)) newChar=Character.toLowerCase(newChar);
+                if (Character.isUpperCase(currChar)) newChar=Character.toUpperCase(newChar);
+                encrypted.setCharAt(i, newChar);
             }
-            
+            //Otherwise: do nothing
         }
+        //Your answer is the String inside of encrypted
         return encrypted.toString();
     }
-    public void testCeaser(){
-        int key = 15;
-        String message ="India, officially the Republic of India, is a country in South Asia. It is the seventh-largest country by area; the most populous country as of June 2023; and from the time of its independence in 1947, the world's most populous democracy.";
-        String encrypted = encrypt(message,key);
-        System.out.println(" key is "+ key + "\n" + encrypted);
-        String decrypted = encrypt(encrypted,26-key);
-        System.out.println(decrypted);
+    
+public String decrypt(String input) {
+    CaesarCipher2 cc = new CaesarCipher2(26 - mainKey);
+    return cc.encrypt(input);
+}
+    
+    
+public void testCaesarCipher() {
+   int key = 15;
+   FileResource fr = new FileResource();
+   String message = fr.asString();
+   message = "At noon be in the conference room with your hat on for a surprise party. YELL LOUD!";
+   String encrypted = encrypt(message);
+   System.out.println("key is " + key + "\n" + encrypted);
+   String decrypted = encrypt(encrypted);
+   System.out.println(decrypted);
+}
+    
+ public String encryptTwoKeys(String input, int key1, int key2){
+ String encrypt1 = encrypt(input);
+ String encrypt2 = encrypt(input);
+ StringBuilder encrypted= new StringBuilder(input);
+ 
+    for (int i=0; i< input.length();i=i++){
+        if (isEven(i))
+            encrypted.setCharAt(i, encrypt1.charAt(i));
+            
+        if (!isEven(i))encrypted.setCharAt(i, encrypt2.charAt(i));
     }
-    public void testCaesar() {
-        int key = 17;
-        FileResource fr = new FileResource();
-        String message = fr.asString();
-        String encrypted = encrypt(message, key);
-        System.out.println(encrypted);
-        String decrypted = encrypt(encrypted, 26-key);
-        System.out.println(decrypted);
-    }
+    
+    return encrypted.toString();   
+ }
+    
+ public void test_encryptTwoKeys(){
+     String input = "At noon be in the conference room with your hat on for a surprise party. YELL LOUD!";
+     int key1 = 22;
+     int key2 = 19;
+     System.out.println(input);
+     System.out.println(encryptTwoKeys(input, key1, key2));
+}
+
 }
