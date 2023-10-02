@@ -3,8 +3,8 @@ import java.io.*;
 /**
  * Write a description of AllGenesStored here.
  * 
- * @author (your name) 
- * @version (a version number or a date)
+ * @author Tushar Pawar
+ * @version Sep,
  */
 public class AllGenesStored {
    public int findStopCodon(String dnaStr, int startIndex, String stopCodon) {
