@@ -3,8 +3,8 @@ import java.io.*;
 /**
  * Write a description of Genes here.
  * 
- * @author (your name) 
- * @version (a version number or a date)
+ * @author Tushar Pawar 
+ * @version Sep, 2023
  */
 public class Genes {
     public String findProtein(String dna){
